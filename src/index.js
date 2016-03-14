@@ -9,7 +9,6 @@ export default function autoRoutes(router, searchPattern) {
   // let rootControllerFolder = this.dirname + '/../api/controllers/';
   // let path = rootControllerFolder + '**/*.js';
   let suffix = 'Controller';
-  let add = this.addRoutes;
 
   glob(searchPattern, function(er, files) {
     for (let f of files) {
