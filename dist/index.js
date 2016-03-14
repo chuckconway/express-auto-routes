@@ -29,7 +29,6 @@ function autoRoutes(router, searchPattern) {
   // let rootControllerFolder = this.dirname + '/../api/controllers/';
   // let path = rootControllerFolder + '**/*.js';
   var suffix = 'Controller';
-  var add = this.addRoutes;
 
   (0, _glob2.default)(searchPattern, function (er, files) {
     var _iteratorNormalCompletion = true;
