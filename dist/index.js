@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = autoRoutes;
+exports.httpGet = httpGet;
+exports.httpPost = httpPost;
+exports.httpPut = httpPut;
+exports.httpDelete = httpDelete;
 
 var _express = require('express');
 
@@ -24,10 +28,6 @@ var _glob2 = _interopRequireDefault(_glob);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function autoRoutes(router, searchPattern) {
-
-  //let router = express.Router();
-  // let rootControllerFolder = this.dirname + '/../api/controllers/';
-  // let path = rootControllerFolder + '**/*.js';
   var suffix = 'Controller';
 
   (0, _glob2.default)(searchPattern, function (er, files) {
@@ -101,3 +101,56 @@ function addRoutes(router, controller, action) {
     console.log('Controller ' + controller.name + ' does not contain routes');
   }
 }
+
+function httpGet(path) {
+  return function (target, key, descriptor) {
+    route(target, key, descriptor, 'GET', path);
+  };
+}
+
+function httpPost(path) {
+  return function (target, key, descriptor) {
+    route(target, key, descriptor, 'POST', path);
+  };
+}
+
+function httpPut(path) {
+  return function (target, key, descriptor) {
+    route(target, key, descriptor, 'PUT', path);
+  };
+}
+
+function httpDelete(path) {
+  return function (target, key, descriptor) {
+    route(target, key, descriptor, 'DELETE', path);
+  };
+}
+
+function route(target, key, descriptor, httpMethod, path) {
+  var fn = descriptor.value;
+
+  delete descriptor.value;
+  delete descriptor.writable;
+
+  if (!path) {
+    path = key;
+  }
+
+  descriptor.get = function () {
+    var bound = fn.bind(this, path);
+
+    Object.defineProperty(this, key, {
+      configurable: true,
+      writable: true,
+      value: bound
+    });
+
+    return bound;
+  };
+
+  if (!target.routes) {
+    target.routes = [];
+  }
+
+  target.routes[target.routes.length] = { path: path, httpMethod: httpMethod, fn: fn };
+};
