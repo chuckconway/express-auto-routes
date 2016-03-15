@@ -54,8 +54,11 @@ function addRoutes(router, controller, action) {
     for (var i = 0; i < routes.length; i++) {
       let r = routes[i];
       router[r.httpMethod.toLowerCase()](r.path, r.fn);
+
+      console.log('Controller ' + controller.name + ' added method ' + r.httpMethod + ' for path ' + r.path);
+
     }
   } else {
-    console.log();
+    console.log('Controller ' + controller.name + ' does not contain routes');
   }
 }
