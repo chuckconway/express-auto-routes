@@ -66,6 +66,8 @@ function autoRoutes(router, searchPattern) {
       }
     }
   });
+
+  return router;
 }
 
 function getUnderliningController(controller) {
