@@ -8,22 +8,30 @@ export default function autoRoutes(router, searchPattern) {
 
   glob(searchPattern, function(er, files) {
     for (let f of files) {
-
       let controllerClass = require(f);
       let controller = getUnderliningController(controllerClass);
-      let name = controller.name;
 
-      //Ensure we only process routes that end with 'Controller'
-      if (name.indexOf(suffix, name.length - suffix.length) !== -1) {
-        addRoutes(router, controller);
+      if(controller !== undefined){
+          addRoutesFromController(controller);
       } else {
-        console.log(`Javascript file, ${name} found, but it does not appear to be a controller. Expecting filename to end with 'Controller'`);
+          console.log(`Javascript file, ${f} was found, but does not appear to be a valid controller. Skipping this file.`)
       }
     }
   });
 
   return router;
 }
+
+function addRoutesFromController (controller){
+    let name = controller.name;
+    //Ensure we only process routes that end with 'Controller'
+    if (name.indexOf(suffix, name.length - suffix.length) !== -1) {
+      addRoutes(router, controller);
+    } else {
+      console.log(`Javascript file, ${name} found, but it does not appear to be a controller. Expecting filename to end with 'Controller'`);
+    }
+}
+
 
 function getUnderliningController(controller) {
   let controllers = [];
