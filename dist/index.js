@@ -28,7 +28,6 @@ var _glob2 = _interopRequireDefault(_glob);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function autoRoutes(router, searchPattern) {
-  var suffix = 'Controller';
 
   (0, _glob2.default)(searchPattern, function (er, files) {
     var _iteratorNormalCompletion = true;
@@ -68,6 +67,7 @@ function autoRoutes(router, searchPattern) {
 }
 
 function addRoutesFromController(controller) {
+  var suffix = 'Controller';
   var name = controller.name;
   //Ensure we only process routes that end with 'Controller'
   if (name.indexOf(suffix, name.length - suffix.length) !== -1) {

@@ -4,7 +4,7 @@ import _ from 'lodash';
 import glob from 'glob';
 
 export default function autoRoutes(router, searchPattern) {
-  let suffix = 'Controller';
+
 
   glob(searchPattern, function(er, files) {
     for (let f of files) {
@@ -23,6 +23,7 @@ export default function autoRoutes(router, searchPattern) {
 }
 
 function addRoutesFromController (controller){
+    let suffix = 'Controller';
     let name = controller.name;
     //Ensure we only process routes that end with 'Controller'
     if (name.indexOf(suffix, name.length - suffix.length) !== -1) {
