@@ -39,16 +39,13 @@ function autoRoutes(router, searchPattern) {
       for (var _iterator = files[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         var f = _step.value;
 
-
         var controllerClass = require(f);
         var controller = getUnderliningController(controllerClass);
-        var name = controller.name;
 
-        //Ensure we only process routes that end with 'Controller'
-        if (name.indexOf(suffix, name.length - suffix.length) !== -1) {
-          addRoutes(router, controller);
+        if (controller !== undefined) {
+          addRoutesFromController(controller);
         } else {
-          console.log('Javascript file, ' + name + ' found, but it does not appear to be a controller. Expecting filename to end with \'Controller\'');
+          console.log('Javascript file, ' + f + ' was found, but does not appear to be a valid controller. Skipping this file.');
         }
       }
     } catch (err) {
@@ -68,6 +65,16 @@ function autoRoutes(router, searchPattern) {
   });
 
   return router;
+}
+
+function addRoutesFromController(controller) {
+  var name = controller.name;
+  //Ensure we only process routes that end with 'Controller'
+  if (name.indexOf(suffix, name.length - suffix.length) !== -1) {
+    addRoutes(router, controller);
+  } else {
+    console.log('Javascript file, ' + name + ' found, but it does not appear to be a controller. Expecting filename to end with \'Controller\'');
+  }
 }
 
 function getUnderliningController(controller) {
