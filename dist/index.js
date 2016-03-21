@@ -42,7 +42,7 @@ function autoRoutes(router, searchPattern) {
         var controller = getUnderliningController(controllerClass);
 
         if (controller !== undefined) {
-          addRoutesFromController(controller);
+          addRoutesFromController(controller, router);
         } else {
           console.log('Javascript file, ' + f + ' was found, but does not appear to be a valid controller. Skipping this file.');
         }
@@ -66,7 +66,7 @@ function autoRoutes(router, searchPattern) {
   return router;
 }
 
-function addRoutesFromController(controller) {
+function addRoutesFromController(controller, router) {
   var suffix = 'Controller';
   var name = controller.name;
   //Ensure we only process routes that end with 'Controller'
