@@ -23,10 +23,10 @@ export default function autoRoutes(router, searchPattern) {
 }
 
 function addRoutesFromController (controller, router){
-    let suffix = 'Controller';
+    let suffix = 'controller';
     let name = controller.name;
     //Ensure we only process routes that end with 'Controller'
-    if (name.indexOf(suffix, name.length - suffix.length) !== -1) {
+    if (name.toLowerCase().indexOf(suffix, name.length - suffix.length) !== -1) {
       addRoutes(router, controller);
     } else {
       console.log(`Javascript file, ${name} found, but it does not appear to be a controller. Expecting filename to end with 'Controller'`);
