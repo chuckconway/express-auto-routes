@@ -100,7 +100,14 @@ function addRoutes(router, controller, action) {
 
     for (var i = 0; i < routes.length; i++) {
       var r = routes[i];
-      router[r.httpMethod.toLowerCase()](r.path, r.middleware, r.fn);
+
+      //add middleware if it's defined.
+      //express throws and error when undefined middleware is added.
+      if (r.middleware) {
+        router[r.httpMethod.toLowerCase()](r.path, r.middleware, r.fn);
+      } else {
+        router[r.httpMethod.toLowerCase()](r.path, r.fn);
+      }
 
       console.log('Controller ' + controller.name + ' added method ' + r.httpMethod + ' for path ' + r.path);
     }
