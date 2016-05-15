@@ -58,7 +58,7 @@ function addRoutes(router, controller, action) {
 
     for (var i = 0; i < routes.length; i++) {
       let r = routes[i];
-      router[r.httpMethod.toLowerCase()](r.path, r.fn);
+      router[r.httpMethod.toLowerCase()](r.path, r.middleware, r.fn);
 
       console.log('Controller ' + controller.name + ' added method ' + r.httpMethod + ' for path ' + r.path);
 
@@ -68,31 +68,31 @@ function addRoutes(router, controller, action) {
   }
 }
 
-export function httpGet(path) {
+export function httpGet(path, middleware) {
   return function(target, key, descriptor){
-    route(target, key, descriptor, 'GET', path);
+    route(target, key, descriptor, 'GET', path, middleware);
   }
 }
 
-export function httpPost(path) {
+export function httpPost(path, middleware) {
   return function(target, key, descriptor){
-    route(target, key, descriptor, 'POST', path);
+    route(target, key, descriptor, 'POST', path, middleware);
   }
 }
 
-export function httpPut(path) {
+export function httpPut(path, middleware) {
   return function(target, key, descriptor){
-    route(target, key, descriptor, 'PUT', path);
+    route(target, key, descriptor, 'PUT', path, middleware);
   }
 }
 
-export function httpDelete(path) {
+export function httpDelete(path, middleware) {
   return function(target, key, descriptor){
-    route(target, key, descriptor, 'DELETE', path);
+    route(target, key, descriptor, 'DELETE', path, middleware);
   }
 }
 
-function route(target, key, descriptor, httpMethod, path) {
+function route(target, key, descriptor, httpMethod, path, middleware) {
     var fn = descriptor.value;
 
     delete descriptor.value;
@@ -118,5 +118,5 @@ function route(target, key, descriptor, httpMethod, path) {
         target.routes = [];
     }
 
-    target.routes[target.routes.length] = {path: path, httpMethod: httpMethod, fn:fn };
+    target.routes[target.routes.length] = {path: path, httpMethod: httpMethod, fn:fn, middleware:middleware };
 };
