@@ -3,8 +3,9 @@ import fs from 'fs';
 import _ from 'lodash';
 import glob from 'glob';
 
-export default function autoRoutes(router, searchPattern) {
+const addedRoutes = [];
 
+export default function autoRoutes(router, searchPattern) {
 
   glob(searchPattern, function(er, files) {
     for (let f of files) {
@@ -17,6 +18,13 @@ export default function autoRoutes(router, searchPattern) {
           console.log(`Javascript file, ${f} was found, but does not appear to be a valid controller. Skipping this file.`)
       }
     }
+
+    console.log('Routes added:');
+
+    for (var i = 0; i < addRoutes.length; i++) {
+      console.log(`${addRoutes[i].method}: ${addRoutes[i].path} - ${addRoutes[i].name}`);
+    }
+
   });
 
   return router;
@@ -29,7 +37,7 @@ function addRoutesFromController (controller, router){
     if (name.toLowerCase().indexOf(suffix, name.length - suffix.length) !== -1) {
       addRoutes(router, controller);
     } else {
-      console.log(`Javascript file, ${name} found, but it does not appear to be a controller. Expecting filename to end with 'Controller'`);
+      console.log(`Javascript file, ${name} found, but it does not appear to be a controller. Expecting filename to end with 'Controller'(case insensitive)`);
     }
 }
 
@@ -67,7 +75,9 @@ function addRoutes(router, controller, action) {
         router[r.httpMethod.toLowerCase()](r.path, r.fn);
       }
 
-      console.log('Controller ' + controller.name + ' added method ' + r.httpMethod + ' for path ' + r.path);
+      addedRoutes[addedRoutes.length] = {name: controller.name, method:r.httpMethod, path:r.path};
+
+      //console.log('Controller ' + controller.name + ' added method ' + r.httpMethod + ' for path ' + r.path);
 
     }
   } else {

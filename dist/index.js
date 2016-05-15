@@ -27,6 +27,8 @@ var _glob2 = _interopRequireDefault(_glob);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var addedRoutes = [];
+
 function autoRoutes(router, searchPattern) {
 
   (0, _glob2.default)(searchPattern, function (er, files) {
@@ -61,19 +63,25 @@ function autoRoutes(router, searchPattern) {
         }
       }
     }
+
+    console.log('Routes added:');
+
+    for (var i = 0; i < addRoutes.length; i++) {
+      console.log(addRoutes[i].method + ': ' + addRoutes[i].path + ' - ' + addRoutes[i].name);
+    }
   });
 
   return router;
 }
 
 function addRoutesFromController(controller, router) {
-  var suffix = 'Controller';
+  var suffix = 'controller';
   var name = controller.name;
   //Ensure we only process routes that end with 'Controller'
-  if (name.indexOf(suffix, name.length - suffix.length) !== -1) {
+  if (name.toLowerCase().indexOf(suffix, name.length - suffix.length) !== -1) {
     addRoutes(router, controller);
   } else {
-    console.log('Javascript file, ' + name + ' found, but it does not appear to be a controller. Expecting filename to end with \'Controller\'');
+    console.log('Javascript file, ' + name + ' found, but it does not appear to be a controller. Expecting filename to end with \'Controller\'(case insensitive)');
   }
 }
 
@@ -109,11 +117,13 @@ function addRoutes(router, controller, action) {
         router[r.httpMethod.toLowerCase()](r.path, r.fn);
       }
 
-      console.log('Controller ' + controller.name + ' added method ' + r.httpMethod + ' for path ' + r.path);
+      addedRoutes[addedRoutes.length] = { name: controller.name, method: r.httpMethod, path: r.path };
+
+      //console.log('Controller ' + controller.name + ' added method ' + r.httpMethod + ' for path ' + r.path);
     }
   } else {
-    console.log('Controller ' + controller.name + ' does not contain routes');
-  }
+      console.log('Controller ' + controller.name + ' does not contain routes');
+    }
 }
 
 function httpGet(path, middleware) {
