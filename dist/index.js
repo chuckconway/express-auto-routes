@@ -66,8 +66,8 @@ function autoRoutes(router, searchPattern) {
 
     console.log('Routes added:');
 
-    for (var i = 0; i < addRoutes.length; i++) {
-      console.log(addRoutes[i].method + ': ' + addRoutes[i].path + ' - ' + addRoutes[i].name);
+    for (var i = 0; i < addedRoutes.length; i++) {
+      console.log(addedRoutes[i].method + ': ' + addedRoutes[i].path + ' - ' + addedRoutes[i].name);
     }
   });
 
